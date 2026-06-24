@@ -14,6 +14,7 @@ module.exports = {
             './Input': './src/components/ui/input.tsx',
             './apiHelper': './src/utils/apiHelper.ts',
             './AuthWrapper': './src/components/AuthWrapper.tsx',
+            './Tooltip': './src/components/ui/tooltip.tsx',
           },
           shared: {
             react: { singleton: true, requiredVersion: false },
@@ -21,6 +22,8 @@ module.exports = {
             '@reduxjs/toolkit': { singleton: true },
             'react-redux': { singleton: true },
             '@tanstack/react-query': { singleton: true },
+            '@radix-ui/react-tooltip': { singleton: true },
+            '@radix-ui/react-slot': { singleton: true },
           },
         })
       );
