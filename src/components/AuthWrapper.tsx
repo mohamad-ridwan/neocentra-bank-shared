@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
 import { loginSuccess } from '../store';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
 
 interface AuthWrapperProps {
   children: React.ReactNode;
@@ -10,96 +9,70 @@ interface AuthWrapperProps {
 
 export function AuthWrapper({ children }: AuthWrapperProps) {
   const dispatch = useDispatch();
+  const router = useRouter();
   const auth = useSelector((state: any) => state.auth);
+  const [initializing, setInitializing] = useState(true);
 
-  const [username, setUsername] = useState('admin');
-  const [password, setPassword] = useState('admin123');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
-
-    setTimeout(() => {
-      if (username === 'admin' && password === 'admin123') {
+  // 1. Auto-login dari localStorage token pada saat inisialisasi
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('neocentra_token');
+      if (token && !auth?.isAuthenticated) {
         const mockPayload = {
           user: {
             username: 'admin',
             role: 'Super Administrator',
             email: 'admin@neocentra.com',
           },
-          token: 'mock-jwt-token-neocentra-12345',
+          token,
         };
-        localStorage.setItem('neocentra_token', mockPayload.token);
         dispatch(loginSuccess(mockPayload));
-      } else {
-        setError('Invalid username or password (use admin / admin123)');
       }
-      setLoading(false);
-    }, 800);
-  };
+      setInitializing(false);
+    }
+  }, [auth?.isAuthenticated, dispatch]);
 
-  if (auth?.isAuthenticated) {
+  const publicPaths = ['/login', '/otp', '/logout'];
+  const isPublicPath = publicPaths.includes(router.pathname);
+
+  // 2. Logika redirect berdasarkan status autentikasi dan path saat ini
+  useEffect(() => {
+    if (!initializing) {
+      if (!auth?.isAuthenticated && !isPublicPath) {
+        router.push('/login');
+      } else if (auth?.isAuthenticated && isPublicPath && router.pathname !== '/logout') {
+        router.push('/');
+      }
+    }
+  }, [auth?.isAuthenticated, isPublicPath, router, initializing]);
+
+  if (initializing) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center text-slate-400 font-sans">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-8 h-8 rounded-full border-2 border-teal-500 border-t-transparent animate-spin" />
+          <span className="text-sm font-medium tracking-wide">Mengecek sesi...</span>
+        </div>
+      </div>
+    );
+  }
+
+  // Izinkan render jika:
+  // - Pengguna terautentikasi
+  // - Atau pengguna tidak terautentikasi tetapi berada di path publik
+  if (auth?.isAuthenticated || isPublicPath) {
     return <>{children}</>;
   }
 
+  // Tampilkan loading saat proses redirect
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-950 text-slate-100 p-4 font-sans relative overflow-hidden">
-      {/* Background gradients for premium glassmorphic effect */}
-      <div className="absolute top-[-20%] left-[-20%] w-[60%] h-[60%] rounded-full bg-teal-500/10 blur-[120px]" />
-      <div className="absolute bottom-[-20%] right-[-20%] w-[60%] h-[60%] rounded-full bg-indigo-500/10 blur-[120px]" />
-
-      <div className="w-full max-w-md bg-slate-900/60 border border-slate-800/80 backdrop-blur-xl p-8 rounded-2xl shadow-2xl relative z-10 transition-all duration-300">
-        <div className="flex flex-col items-center mb-8">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-teal-500 to-indigo-500 flex items-center justify-center shadow-lg shadow-teal-500/20 mb-4">
-            <span className="text-white font-black text-xl tracking-tighter">N</span>
-          </div>
-          <h2 className="text-2xl font-bold tracking-tight text-white">NeoCentra Bank</h2>
-          <p className="text-xs text-slate-400 mt-1">Backoffice Shell Portal</p>
-        </div>
-
-        <form onSubmit={handleLogin} className="space-y-5">
-          {error && (
-            <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-xs rounded-lg p-3 text-center">
-              {error}
-            </div>
-          )}
-
-          <Input
-            label="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="Enter username"
-            required
-          />
-
-          <Input
-            label="Password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter password"
-            required
-          />
-
-          <Button
-            type="submit"
-            className="w-full mt-2"
-            disabled={loading}
-          >
-            {loading ? 'Authenticating...' : 'Sign In'}
-          </Button>
-        </form>
-
-        <div className="mt-6 text-center">
-          <span className="text-xs text-slate-500">
-            Authorized Personnel Only • Access Logged
-          </span>
-        </div>
+    <div className="min-h-screen bg-slate-950 flex items-center justify-center text-slate-400 font-sans">
+      <div className="flex flex-col items-center gap-3">
+        <div className="w-8 h-8 rounded-full border-2 border-teal-500 border-t-transparent animate-spin" />
+        <span className="text-sm font-medium tracking-wide">Mengarahkan...</span>
       </div>
     </div>
   );
 }
+
 export default AuthWrapper;
