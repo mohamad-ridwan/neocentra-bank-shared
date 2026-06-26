@@ -4,6 +4,11 @@ module.exports = {
   reactStrictMode: true,
   webpack(config, options) {
     if (!options.isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        path: false,
+      };
       config.plugins.push(
         new NextFederationPlugin({
           name: 'shared_remote',
@@ -15,6 +20,8 @@ module.exports = {
             './apiHelper': './src/utils/apiHelper.ts',
             './AuthWrapper': './src/components/AuthWrapper.tsx',
             './Tooltip': './src/components/ui/tooltip.tsx',
+            './useRemoteCSS': './src/hooks/useRemoteCSS.ts',
+            './federatedStats': './src/utils/federated-stats.ts',
           },
           shared: {
             react: { singleton: true, requiredVersion: false },

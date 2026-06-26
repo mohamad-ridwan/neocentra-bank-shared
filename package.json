@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "NEXT_PRIVATE_LOCAL_WEBPACK=true next dev -p 3342",
-    "build": "NEXT_PRIVATE_LOCAL_WEBPACK=true next build",
+    "dev": "npx tailwindcss -i ./src/styles/shared-tailwind.css -o ../neocentra-bank-dashboard/public/styles/dashboard-tailwind.css --watch & NEXT_PRIVATE_LOCAL_WEBPACK=true next dev -p 3342",
+    "build": "npx tailwindcss -i ./src/styles/shared-tailwind.css -o ./public/styles/shared-tailwind.css --minify && NEXT_PRIVATE_LOCAL_WEBPACK=true next build",
     "start": "NEXT_PRIVATE_LOCAL_WEBPACK=true next start -p 3342",
     "lint": "next lint"
   },
