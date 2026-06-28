@@ -24,8 +24,6 @@ module.exports = {
             "./federatedStats": "./src/utils/federated-stats.ts",
             "./globalNavigaton": "./src/utils/global-navigation.ts",
             "./Skeleton": "./src/components/ui/skeleton.tsx",
-            "./LayoutSkeleton": "./src/components/LayoutSkeleton.tsx",
-            "./DashboardSkeleton": "./src/components/DashboardSkeleton.tsx",
           },
           shared: {
             react: { singleton: true, requiredVersion: false },
