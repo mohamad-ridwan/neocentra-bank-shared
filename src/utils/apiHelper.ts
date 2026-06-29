@@ -18,15 +18,8 @@ export async function apiFetch<T>(path: string, options: RequestInit = {}): Prom
     ...options.headers,
   } as Record<string, string>;
 
-  // Try to retrieve token from localStorage if in client-side environment
-  if (typeof window !== 'undefined') {
-    const token = localStorage.getItem('neocentra_token');
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
-    }
-  }
-
   const response = await fetch(path, {
+    credentials: 'include',
     ...options,
     headers,
   });
