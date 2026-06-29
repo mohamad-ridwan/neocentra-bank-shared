@@ -33,7 +33,9 @@ export async function apiFetch<T>(path: string, options: RequestInit = {}): Prom
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.message || 'API request failed');
+    const error = new Error(errorData.message || 'API request failed') as any;
+    error.status = response.status;
+    throw error;
   }
 
   return response.json();
