@@ -18,7 +18,10 @@ export async function apiFetch<T>(path: string, options: RequestInit = {}): Prom
     ...options.headers,
   } as Record<string, string>;
 
-  const response = await fetch(path, {
+  const baseUrl = 'http://localhost:8080';
+  const url = (path.startsWith('/') && !path.startsWith('//')) ? `${baseUrl}${path}` : path;
+
+  const response = await fetch(url, {
     credentials: 'include',
     ...options,
     headers,

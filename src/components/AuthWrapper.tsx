@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { loginSuccess, logout } from "../store";
 import { apiFetch } from "../utils/apiHelper";
 import { Clock } from "lucide-react";
+import Cookies from "js-cookie";
 
 interface AuthWrapperProps {
   children: React.ReactNode;
@@ -68,13 +69,21 @@ export function AuthWrapper({ children }: AuthWrapperProps) {
   // 1. Auto-login dari BFF session cookie pada saat inisialisasi
   useEffect(() => {
     const checkSession = async () => {
+      const loggedIn = Cookies.get("neocentra_logged_in");
+      if (!loggedIn) {
+        setInitializing(false);
+        return;
+      }
       try {
         const data = await apiFetch<{ user: any }>("/api/auth/session");
         if (data && data.user) {
           dispatch(loginSuccess({ user: data.user, token: null }));
+        } else {
+          Cookies.remove("neocentra_logged_in");
         }
       } catch (err) {
         console.warn("No active session:", err);
+        Cookies.remove("neocentra_logged_in");
       } finally {
         setInitializing(false);
       }
