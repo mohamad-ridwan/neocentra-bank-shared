@@ -24,6 +24,11 @@ export async function apiFetch<T>(path: string, options: RequestInit = {}): Prom
     headers,
   });
 
+  if (response.redirected && typeof window !== "undefined") {
+    window.location.href = response.url;
+    return new Promise(() => {});
+  }
+
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
     const error = new Error(errorData.message || 'API request failed') as any;
