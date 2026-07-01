@@ -61,7 +61,7 @@ export function useRemoteCSS(
 
         // 4. Suntikkan berkas CSS ke head dokumen Host
         cssFiles.forEach((cssPath) => {
-          const fullCssUrl = cssPath.startsWith("http")
+          const fullCssUrl = cssPath.startsWith("http") || cssPath.startsWith("/")
             ? cssPath
             : `${baseUrl}/_next/${cssPath}`;
 

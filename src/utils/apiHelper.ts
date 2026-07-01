@@ -1,4 +1,4 @@
-import { QueryClient } from '@tanstack/react-query';
+import { QueryClient } from "@tanstack/react-query";
 
 // Create a singleton instance of QueryClient
 export const queryClient = new QueryClient({
@@ -12,17 +12,22 @@ export const queryClient = new QueryClient({
 });
 
 // Simple premium fetch wrapper
-export async function apiFetch<T>(path: string, options: RequestInit = {}): Promise<T> {
+export async function apiFetch<T>(
+  path: string,
+  options: RequestInit = {},
+): Promise<T> {
   const headers = {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
     ...options.headers,
   } as Record<string, string>;
 
-  const baseUrl = 'http://localhost:8080';
-  const url = (path.startsWith('/') && !path.startsWith('//')) ? `${baseUrl}${path}` : path;
+  const isServer = typeof window === "undefined";
+  const baseUrl = isServer ? "http://localhost:8080" : "";
+  const url =
+    path.startsWith("/") && !path.startsWith("//") ? `${baseUrl}${path}` : path;
 
   const response = await fetch(url, {
-    credentials: 'include',
+    credentials: "include",
     ...options,
     headers,
   });
@@ -34,7 +39,7 @@ export async function apiFetch<T>(path: string, options: RequestInit = {}): Prom
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
-    const error = new Error(errorData.message || 'API request failed') as any;
+    const error = new Error(errorData.message || "API request failed") as any;
     error.status = response.status;
     throw error;
   }

@@ -1,0 +1,46 @@
+{
+  "sharedModules": [],
+  "federatedModules": [
+    {
+      "remote": "shared_remote",
+      "entry": "static/chunks/remoteEntry.js",
+      "sharedModules": [],
+      "exposes": {
+        "./store": [
+          "static/chunks/__federation_expose_store.4d19c89b439cdb0f.js"
+        ],
+        "./Button": [
+          "static/chunks/__federation_expose_Button.cd1a65c422046aeb.js"
+        ],
+        "./Input": [
+          "static/chunks/__federation_expose_Input.95b8a5a0e26c641a.js"
+        ],
+        "./apiHelper": [
+          "static/chunks/__federation_expose_apiHelper.54b8b3992d655377.js"
+        ],
+        "./AuthWrapper": [
+          "static/chunks/__federation_expose_AuthWrapper.db85c2ce912cf265.js"
+        ],
+        "./Tooltip": [
+          "static/chunks/__federation_expose_Tooltip.1e25f3691b2fb366.js"
+        ],
+        "./useRemoteCSS": [
+          "static/chunks/__federation_expose_useRemoteCSS.52bc13dd5de02cf1.js"
+        ],
+        "./federatedStats": [
+          "static/chunks/__federation_expose_federatedStats.1a60b7f22cdf9caa.js"
+        ],
+        "./globalNavigaton": [
+          "static/chunks/__federation_expose_globalNavigaton.143084efaf09ec5f.js"
+        ],
+        "./Skeleton": [
+          "static/chunks/__federation_expose_Skeleton.92b9b19bc19d6fa9.js"
+        ]
+      },
+      "remoteModules": {}
+    }
+  ],
+  "globalCSS": [
+    "/mf-shared/styles/shared-tailwind.css"
+  ]
+}
