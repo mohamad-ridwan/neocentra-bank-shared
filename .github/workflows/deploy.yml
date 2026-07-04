@@ -1,0 +1,86 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - feature/ui
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Dependencies
+        run: |
+          cd neocentra-bank-shared
+          npm ci
+
+      - name: Run Lint
+        run: |
+          cd neocentra-bank-shared
+          npm run lint || echo "Lint warnings allowed"
+
+      - name: Run Tests
+        run: |
+          cd neocentra-bank-shared
+          npm run test -- --run
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/feature/ui'
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: actions/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: actions/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry (GHCR)
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: neocentra-bank-shared/Dockerfile
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/neocentra-bank-shared:${{ github.sha }}
+            ghcr.io/${{ github.repository_owner }}/neocentra-bank-shared:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/feature/ui'
+    steps:
+      - name: Set up Kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
+          chmod 600 ~/.kube/config
+
+      - name: Deploy to K8s
+        run: |
+          kubectl set image deployment/neocentra-mfe-shared shared-mfe=ghcr.io/${{ github.repository_owner }}/neocentra-bank-shared:${{ github.sha }} --record
+          kubectl rollout status deployment/neocentra-mfe-shared
