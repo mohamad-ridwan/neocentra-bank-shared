@@ -17,6 +17,7 @@ module.exports = {
             "./store": "./src/store/index.ts",
             "./Button": "./src/components/ui/button.tsx",
             "./Input": "./src/components/ui/input.tsx",
+            "./Dialog": "./src/components/ui/dialog.tsx",
             "./apiHelper": "./src/utils/apiHelper.ts",
             "./AuthWrapper": "./src/components/AuthWrapper.tsx",
             "./Tooltip": "./src/components/ui/tooltip.tsx",
