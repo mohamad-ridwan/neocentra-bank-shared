@@ -26,6 +26,7 @@ module.exports = {
             "./federatedStats": "./src/utils/federated-stats.ts",
             "./globalNavigaton": "./src/utils/global-navigation.ts",
             "./Skeleton": "./src/components/ui/skeleton.tsx",
+            "./Toast": "./src/components/ui/toast.tsx",
           },
           shared: {
             react: { singleton: true, requiredVersion: false },
