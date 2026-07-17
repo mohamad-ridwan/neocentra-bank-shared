@@ -35,6 +35,7 @@ module.exports = {
             "react-redux": { singleton: true },
             "@tanstack/react-query": { singleton: true },
             "@radix-ui/react-tooltip": { singleton: true },
+            sonner: { singleton: true, requiredVersion: false },
             "@radix-ui/react-slot": { singleton: true },
           },
         }),
