@@ -21,6 +21,7 @@ module.exports = {
             "./apiHelper": "./src/utils/apiHelper.ts",
             "./AuthWrapper": "./src/components/AuthWrapper.tsx",
             "./Tooltip": "./src/components/ui/tooltip.tsx",
+            "./DropdownMenu": "./src/components/ui/dropdown-menu.tsx",
             "./useRemoteCSS": "./src/hooks/useRemoteCSS.ts",
             "./federatedStats": "./src/utils/federated-stats.ts",
             "./globalNavigaton": "./src/utils/global-navigation.ts",
