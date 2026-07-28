@@ -27,6 +27,7 @@ module.exports = {
             "./globalNavigaton": "./src/utils/global-navigation.ts",
             "./Skeleton": "./src/components/ui/skeleton.tsx",
             "./Toast": "./src/components/ui/toast.tsx",
+            "./imageGallery": "./src/components/feature/imageGallery.tsx",
           },
           shared: {
             react: { singleton: true, requiredVersion: false },
@@ -37,6 +38,7 @@ module.exports = {
             "@radix-ui/react-tooltip": { singleton: true },
             sonner: { singleton: true, requiredVersion: false },
             "@radix-ui/react-slot": { singleton: true },
+            lightgallery: { singleton: true, requiredVersion: false },
           },
         }),
       );
