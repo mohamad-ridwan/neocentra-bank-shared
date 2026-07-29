@@ -42,21 +42,19 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({
   if (!images || images.length === 0) return null;
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-[99999]">
-      <LightGallery
-        onInit={onInit}
-        onAfterClose={handleAfterClose}
-        speed={500}
-        plugins={[lgThumbnail, lgZoom]}
-        elementClassNames="hidden"
-      >
-        {images.map((src, index) => (
-          <a key={`${src}-${index}`} href={src}>
-            <img alt={`Gallery image ${index + 1}`} src={src} />
-          </a>
-        ))}
-      </LightGallery>
-    </div>
+    <LightGallery
+      onInit={onInit}
+      onAfterClose={handleAfterClose}
+      speed={500}
+      plugins={[lgThumbnail, lgZoom]}
+      elementClassNames="hidden"
+    >
+      {images.map((src, index) => (
+        <a key={`${src}-${index}`} href={src}>
+          <img alt={`Gallery image ${index + 1}`} src={src} />
+        </a>
+      ))}
+    </LightGallery>
   );
 };
 
