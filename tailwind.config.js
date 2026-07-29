@@ -3,10 +3,11 @@ module.exports = {
   content: [
     "./src/**/*.{js,ts,jsx,tsx}",
     "../neocentra-bank-dashboard/src/**/*.{js,ts,jsx,tsx}",
+    "../neocentra-bank-stream/src/**/*.{js,ts,jsx,tsx}",
   ],
-  presets: [require('./tailwind.preset.js')],
+  presets: [require("./tailwind.preset.js")],
   theme: {
     extend: {},
   },
   plugins: [],
-}
+};

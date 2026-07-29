@@ -61,9 +61,10 @@ export function useRemoteCSS(
 
         // 4. Suntikkan berkas CSS ke head dokumen Host
         cssFiles.forEach((cssPath) => {
-          const fullCssUrl = cssPath.startsWith("http") || cssPath.startsWith("/")
-            ? cssPath
-            : `${baseUrl}/_next/${cssPath}`;
+          const fullCssUrl =
+            cssPath.startsWith("http") || cssPath.startsWith("/")
+              ? cssPath
+              : `${baseUrl}/_next/${cssPath}`;
 
           // Mencegah duplikasi injeksi jika link stylesheet tersebut sudah ada
           const existingLink = document.querySelector(
